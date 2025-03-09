@@ -33,8 +33,9 @@ export default function HomePage() {
             </p>
             <span className="block text-xl font-medium">
               🚀 Stay tuned for our official launch & join the{" "}
-              <strong>closed beta</strong> today!
+              <strong>closed beta</strong> very soon!
             </span>
+            <p></p>
           </div>
         </div>
 
