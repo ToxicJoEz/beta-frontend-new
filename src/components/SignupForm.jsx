@@ -14,12 +14,13 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Show loader
-
+  
     try {
       const response = await axios.post(
         "https://fileflow-backend-production.up.railway.app/signup",
         formData
       );
+  
       setMessage({
         type: "success",
         text: "Signup successful!",
@@ -27,16 +28,15 @@ const SignupForm = () => {
       setFormData({ name: "", email: "" });
     } catch (error) {
       let errorMessage = "Error signing up!";
-
-      // Check if the response has a message
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        errorMessage = error.response.data.message;
+  
+      if (error.response) {
+        if (error.response.status === 429) {
+          errorMessage = "Too many signups. try again later.";
+        } else if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
       }
-
+  
       setMessage({
         type: "error",
         text: errorMessage,
@@ -45,7 +45,7 @@ const SignupForm = () => {
       setIsLoading(false); // Hide loader and show button again
     }
   };
-
+  
   return (
     <div className="flex items-center justify-end mx-12">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 shadow-xl shadow-black">
@@ -168,7 +168,7 @@ const SignupForm = () => {
                     </div>
                     <div>
                       <p className="text-white text-xs">Error signing up!</p>
-                      <p class="text-gray-500 text-xs">{message.text}</p>
+                      <p className="text-gray-500 text-xs">{message.text}</p>
                     </div>
                   </div>
                 </div>
