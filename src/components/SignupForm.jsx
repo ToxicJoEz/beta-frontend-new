@@ -14,13 +14,13 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Show loader
-  
+
     try {
       const response = await axios.post(
         "https://fileflow-backend-production.up.railway.app/signup",
         formData
       );
-  
+
       setMessage({
         type: "success",
         text: "Signup successful!",
@@ -28,15 +28,21 @@ const SignupForm = () => {
       setFormData({ name: "", email: "" });
     } catch (error) {
       let errorMessage = "Error signing up!";
-  
+
       if (error.response) {
-        if (error.response.status === 429) {
-          errorMessage = "Too many signups. try again later.";
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === "Email is already in use"
+        ) {
+          errorMessage =
+            "Email already registered. Please use a different email.";
+        } else if (error.response.status === 429) {
+          errorMessage = "Too many signups. Try again later.";
         } else if (error.response.data && error.response.data.message) {
           errorMessage = error.response.data.message;
         }
       }
-  
+
       setMessage({
         type: "error",
         text: errorMessage,
@@ -45,7 +51,7 @@ const SignupForm = () => {
       setIsLoading(false); // Hide loader and show button again
     }
   };
-  
+
   return (
     <div className="flex items-center justify-end mx-12">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96 shadow-xl shadow-black">
