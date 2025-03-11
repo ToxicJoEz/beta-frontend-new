@@ -35,7 +35,7 @@ const SignupForm = () => {
           error.response.data.message === "Email is already in use"
         ) {
           errorMessage =
-            "Email already registered. Please use a different email.";
+            "Email already used. Please use a different email.";
         } else if (error.response.status === 429) {
           errorMessage = "Too many signups. Try again later.";
         } else if (error.response.data && error.response.data.message) {
